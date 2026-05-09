@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future Technology Project – Soran University</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --bg: #070b14;
+  --bg2: #0d1526;
+  --bg3: #111e35;
+  --surface: #0f1c30;
+  --border: #1e3a5f;
+  --accent: #00c8ff;
+  --accent2: #f5a623;
+  --accent3: #00ff88;
+  --text: #e8f4ff;
+  --text2: #8bafc8;
+  --card-bg: #0d1a2e;
+  --shadow: rgba(0,200,255,0.15);
+  --nav-bg: rgba(7,11,20,0.92);
+  --hero-glow: rgba(0,200,255,0.12);
+  --soran-blue: #1a3a6e;
+  --soran-gold: #f5a623;
+}
+[data-theme="light"] {
+  --bg: #f0f6ff;
+  --bg2: #e4edf8;
+  --bg3: #d8e8f5;
+  --surface: #ffffff;
+  --border: #b0cce4;
+  --accent: #0077cc;
+  --accent2: #e08800;
+  --accent3: #009955;
+  --text: #0a1628;
+  --text2: #3a5a7a;
+  --card-bg: #ffffff;
+  --shadow: rgba(0,119,204,0.12);
+  --nav-bg: rgba(240,246,255,0.95);
+  --hero-glow: rgba(0,119,204,0.08);
+}
+
+/* ===== RESET ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Exo 2',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .4s,color .4s}
+a{text-decoration:none;color:inherit}
+img{max-width:100%}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+
+/* ===== NOISE OVERLAY ===== */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.4
+}
+
+/* ===== NAV ===== */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:var(--nav-bg);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:1rem;
+  padding:.7rem 2rem;transition:background .4s
+}
+.nav-logo{display:flex;align-items:center;gap:.7rem;margin-right:.5rem}
+.nav-logo img{height:42px;width:auto;filter:drop-shadow(0 0 6px rgba(245,166,35,.5))}
+.nav-title{font-family:'Orbitron',monospace;font-size:.85rem;color:var(--accent);letter-spacing:.05em;line-height:1.2}
+.nav-links{display:flex;gap:1.2rem;flex:1;justify-content:center;flex-wrap:wrap}
+.nav-links a{font-size:.8rem;font-weight:600;letter-spacing:.06em;color:var(--text2);transition:color .2s;text-transform:uppercase}
+.nav-links a:hover{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:.8rem;margin-left:auto}
+#searchBar{
+  background:var(--surface);border:1px solid var(--border);color:var(--text);
+  padding:.4rem .8rem;border-radius:20px;font-family:'Exo 2',sans-serif;font-size:.8rem;
+  width:160px;outline:none;transition:border-color .2s,width .3s
+}
+#searchBar:focus{border-color:var(--accent);width:200px}
+#searchBar::placeholder{color:var(--text2)}
+.theme-btn{
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text);width:36px;height:36px;border-radius:50%;cursor:pointer;
+  font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s
+}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ===== SEARCH RESULTS OVERLAY ===== */
+#searchOverlay{
+  display:none;position:fixed;inset:0;background:rgba(7,11,20,.97);z-index:999;
+  padding:7rem 2rem 2rem;overflow-y:auto
+}
+#searchOverlay.active{display:block}
+.search-close{
+  position:fixed;top:1.5rem;right:2rem;background:var(--accent);color:#000;
+  border:none;padding:.4rem 1rem;border-radius:20px;cursor:pointer;
+  font-family:'Orbitron',monospace;font-size:.75rem;z-index:1100
+}
+.search-results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;max-width:1200px;margin:0 auto}
+.search-result-card{
+  background:var(--card-bg);border:1px solid var(--border);border-radius:12px;
+  padding:1.5rem;transition:border-color .2s
+}
+.search-result-card:hover{border-color:var(--accent)}
+.search-result-card h3{color:var(--accent);font-family:'Orbitron',monospace;font-size:.9rem;margin-bottom:.5rem}
+.search-result-card p{color:var(--text2);font-size:.85rem;line-height:1.6}
+.search-result-card .tag{display:inline-block;background:var(--accent);color:#000;font-size:.7rem;padding:.2rem .6rem;border-radius:10px;margin-bottom:.5rem;font-weight:700}
+#searchHeading{font-family:'Orbitron',monospace;color:var(--accent);margin-bottom:1.5rem;font-size:1.2rem}
+#noResults{color:var(--text2);font-size:1rem;display:none;padding:2rem 0}
+
+/* ===== HERO ===== */
+#hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:6rem 2rem 4rem;position:relative;overflow:hidden
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 40%, var(--hero-glow), transparent 70%);
+  pointer-events:none
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:60px 60px;opacity:.18;pointer-events:none
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(0,200,255,.08);border:1px solid rgba(0,200,255,.3);
+  border-radius:30px;padding:.4rem 1.2rem;font-size:.75rem;letter-spacing:.12em;
+  color:var(--accent);text-transform:uppercase;margin-bottom:2rem
+}
+.hero-badge span{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-uni{display:flex;align-items:center;gap:1rem;justify-content:center;margin-bottom:1.5rem}
+.hero-uni img{height:70px;filter:drop-shadow(0 0 12px rgba(245,166,35,.4))}
+.hero-uni-text{text-align:left}
+.hero-uni-text .u1{font-family:'Orbitron',monospace;font-size:.7rem;color:var(--accent2);letter-spacing:.1em;text-transform:uppercase}
+.hero-uni-text .u2{font-size:.85rem;color:var(--text2);letter-spacing:.05em}
+h1{font-family:'Orbitron',monospace;font-size:clamp(2rem,6vw,4.5rem);font-weight:900;line-height:1.1;margin-bottom:1rem}
+h1 .line1{color:var(--text)}
+h1 .line2{color:var(--accent);text-shadow:0 0 30px rgba(0,200,255,.5)}
+#typed{border-right:2px solid var(--accent);padding-right:3px;animation:blink .7s infinite}
+@keyframes blink{0%,100%{border-color:var(--accent)}50%{border-color:transparent}}
+.hero-desc{max-width:620px;color:var(--text2);font-size:1rem;line-height:1.8;margin-bottom:2.5rem}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+.btn-primary{
+  background:var(--accent);color:#000;border:none;padding:.8rem 2rem;
+  border-radius:30px;font-family:'Orbitron',monospace;font-size:.8rem;font-weight:700;
+  cursor:pointer;letter-spacing:.08em;transition:all .2s;text-transform:uppercase
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,200,255,.4)}
+.btn-secondary{
+  background:transparent;color:var(--accent);border:1px solid var(--accent);
+  padding:.8rem 2rem;border-radius:30px;font-family:'Orbitron',monospace;font-size:.8rem;
+  cursor:pointer;letter-spacing:.08em;transition:all .2s;text-transform:uppercase
+}
+.btn-secondary:hover{background:rgba(0,200,255,.1);transform:translateY(-2px)}
+.hero-stats{
+  display:flex;gap:3rem;flex-wrap:wrap;justify-content:center;
+  margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border)
+}
+.hero-stat{text-align:center}
+.hero-stat .num{font-family:'Orbitron',monospace;font-size:1.8rem;color:var(--accent);font-weight:700}
+.hero-stat .lab{font-size:.75rem;color:var(--text2);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem}
+
+/* ===== SECTIONS ===== */
+section{padding:5rem 2rem;max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.section-label{
+  font-family:'Orbitron',monospace;font-size:.7rem;letter-spacing:.2em;
+  color:var(--accent);text-transform:uppercase;margin-bottom:.8rem;
+  display:flex;align-items:center;gap:.6rem
+}
+.section-label::before{content:'';width:30px;height:1px;background:var(--accent)}
+h2{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2.2rem);margin-bottom:1rem;line-height:1.2}
+.section-desc{color:var(--text2);font-size:.95rem;line-height:1.8;max-width:700px;margin-bottom:3rem}
+
+/* ===== ABOUT GRID ===== */
+.about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem}
+.about-card{
+  background:var(--card-bg);border:1px solid var(--border);border-radius:16px;
+  padding:2rem;position:relative;overflow:hidden;transition:all .3s;cursor:default
+}
+.about-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent-c,var(--accent)),transparent);
+  transition:opacity .3s
+}
+.about-card:hover{transform:translateY(-5px);border-color:var(--accent-c,var(--accent));box-shadow:0 12px 30px var(--shadow)}
+.about-icon{font-size:2.5rem;margin-bottom:1rem}
+.about-card h3{font-family:'Orbitron',monospace;font-size:.95rem;margin-bottom:.7rem;color:var(--accent-c,var(--accent))}
+.about-card p{color:var(--text2);font-size:.85rem;line-height:1.7}
+
+/* ===== FILTER BAR ===== */
+.filter-bar{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.filter-btn{
+  background:var(--surface);border:1px solid var(--border);color:var(--text2);
+  padding:.5rem 1.2rem;border-radius:20px;cursor:pointer;font-family:'Exo 2',sans-serif;
+  font-size:.8rem;font-weight:600;letter-spacing:.05em;transition:all .2s
+}
+.filter-btn:hover,.filter-btn.active{background:var(--accent);color:#000;border-color:var(--accent)}
+
+/* ===== RESEARCH CARDS ===== */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.res-card{
+  background:var(--card-bg);border:1px solid var(--border);border-radius:16px;
+  padding:1.8rem;transition:all .3s;position:relative;overflow:hidden
+}
+.res-card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 60%,rgba(0,200,255,.04));pointer-events:none
+}
+.res-card:hover{transform:translateY(-6px);border-color:var(--accent);box-shadow:0 16px 36px var(--shadow)}
+.res-card.hidden{display:none}
+.card-tag{
+  display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.08em;
+  padding:.3rem .8rem;border-radius:10px;margin-bottom:1rem;text-transform:uppercase
+}
+.tag-ai{background:rgba(0,200,255,.15);color:var(--accent)}
+.tag-security{background:rgba(0,255,136,.15);color:var(--accent3)}
+.tag-cloud{background:rgba(245,166,35,.15);color:var(--accent2)}
+.tag-iot{background:rgba(180,100,255,.15);color:#c080ff}
+.res-card h3{font-family:'Orbitron',monospace;font-size:.9rem;margin-bottom:.7rem}
+.res-card p{color:var(--text2);font-size:.85rem;line-height:1.7}
+.res-card .card-icon{font-size:2rem;margin-bottom:.8rem}
+
+/* ===== APPLICATIONS ===== */
+.apps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem}
+.app-item{
+  background:var(--card-bg);border:1px solid var(--border);border-radius:12px;
+  padding:1.5rem;text-align:center;transition:all .3s
+}
+.app-item:hover{border-color:var(--accent2);transform:scale(1.03);box-shadow:0 8px 24px rgba(245,166,35,.15)}
+.app-item .icon{font-size:2.2rem;margin-bottom:.8rem}
+.app-item h4{font-family:'Orbitron',monospace;font-size:.75rem;color:var(--text);margin-bottom:.4rem}
+.app-item p{font-size:.78rem;color:var(--text2);line-height:1.6}
+
+/* ===== STATS SECTION ===== */
+#stats-section{
+  background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:5rem 2rem;margin:0
+}
+#stats-section > *{max-width:1200px;margin-left:auto;margin-right:auto}
+.stats-inner{max-width:1200px;margin:0 auto}
+.progress-list{display:flex;flex-direction:column;gap:1.8rem;max-width:700px}
+.prog-item{position:relative}
+.prog-header{display:flex;justify-content:space-between;margin-bottom:.5rem}
+.prog-label{font-weight:600;font-size:.9rem}
+.prog-val{font-family:'Orbitron',monospace;font-size:.85rem;color:var(--accent)}
+.prog-track{background:var(--border);border-radius:10px;height:10px;overflow:hidden}
+.prog-bar{
+  height:100%;border-radius:10px;width:0;
+  transition:width 1.2s cubic-bezier(.4,0,.2,1);
+  background:linear-gradient(90deg,var(--accent),var(--accent2))
+}
+.prog-bar.ai-bar{background:linear-gradient(90deg,var(--accent),#0066ff)}
+.prog-bar.sec-bar{background:linear-gradient(90deg,var(--accent3),#00cc66)}
+.prog-bar.cloud-bar{background:linear-gradient(90deg,var(--accent2),#ff6600)}
+.prog-bar.iot-bar{background:linear-gradient(90deg,#c080ff,#ff44aa)}
+.prog-bar.ml-bar{background:linear-gradient(90deg,var(--accent),var(--accent3))}
+
+/* ===== GALLERY ===== */
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:1rem
+}
+.gallery-item{
+  border-radius:12px;overflow:hidden;position:relative;cursor:pointer;
+  aspect-ratio:4/3;border:1px solid var(--border);
+  background:var(--card-bg);display:flex;align-items:center;justify-content:center;
+  transition:all .3s;flex-direction:column;gap:.8rem
+}
+.gallery-item:hover{border-color:var(--accent);transform:scale(1.02);box-shadow:0 12px 28px var(--shadow)}
+.gallery-item .gal-icon{font-size:3.5rem}
+.gallery-item .gal-label{font-family:'Orbitron',monospace;font-size:.7rem;color:var(--text2);letter-spacing:.1em;text-transform:uppercase}
+.gallery-item .gal-overlay{
+  position:absolute;inset:0;background:rgba(0,200,255,.08);
+  opacity:0;transition:opacity .3s;display:flex;align-items:center;justify-content:center
+}
+.gallery-item:hover .gal-overlay{opacity:1}
+
+/* ===== TEAM ===== */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem}
+.team-card{
+  background:var(--card-bg);border:1px solid var(--border);border-radius:20px;
+  padding:2.5rem 1.5rem;text-align:center;transition:all .3s;position:relative;overflow:hidden
+}
+.team-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+}
+.team-card:hover{transform:translateY(-8px);box-shadow:0 20px 40px var(--shadow);border-color:var(--accent)}
+.team-avatar{
+  width:90px;height:90px;border-radius:50%;margin:0 auto 1.2rem;
+  background:linear-gradient(135deg,var(--soran-blue),var(--accent));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:700;color:#fff;
+  border:3px solid var(--border);transition:border-color .3s
+}
+.team-card:hover .team-avatar{border-color:var(--accent)}
+.team-card h3{font-family:'Orbitron',monospace;font-size:1rem;margin-bottom:.3rem;color:var(--text)}
+.team-role{font-size:.8rem;color:var(--accent);font-weight:600;margin-bottom:.8rem;letter-spacing:.06em}
+.team-desc{font-size:.8rem;color:var(--text2);line-height:1.6}
+.team-socials{display:flex;gap:.6rem;justify-content:center;margin-top:1rem}
+.team-socials a{
+  width:30px;height:30px;border-radius:50%;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;
+  transition:all .2s;color:var(--text2)
+}
+.team-socials a:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ===== CONTACT ===== */
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+@media(max-width:768px){.contact-wrap{grid-template-columns:1fr}}
+.contact-info h3{font-family:'Orbitron',monospace;font-size:1.1rem;margin-bottom:1rem;color:var(--accent)}
+.contact-info p{color:var(--text2);font-size:.9rem;line-height:1.8;margin-bottom:1.5rem}
+.contact-details{display:flex;flex-direction:column;gap:1rem}
+.c-detail{display:flex;align-items:center;gap:.8rem;font-size:.85rem;color:var(--text2)}
+.c-detail span:first-child{font-size:1.2rem}
+.contact-form{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:2rem}
+.form-group{margin-bottom:1.2rem}
+.form-group label{display:block;font-size:.8rem;color:var(--text2);margin-bottom:.4rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.form-group input,.form-group textarea,.form-group select{
+  width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);
+  padding:.7rem 1rem;border-radius:10px;font-family:'Exo 2',sans-serif;font-size:.9rem;
+  outline:none;transition:border-color .2s;resize:vertical
+}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--accent)}
+.form-group input.error,.form-group textarea.error{border-color:#ff4466}
+.form-error{color:#ff4466;font-size:.75rem;margin-top:.3rem;display:none}
+.form-error.show{display:block}
+.form-success{
+  background:rgba(0,255,136,.1);border:1px solid var(--accent3);color:var(--accent3);
+  border-radius:10px;padding:1rem;text-align:center;font-weight:600;display:none;margin-top:1rem
+}
+.form-success.show{display:block}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:500px){.form-row{grid-template-columns:1fr}}
+
+/* ===== REFERENCES ===== */
+.refs-list{display:flex;flex-direction:column;gap:1rem;counter-reset:ref}
+.ref-item{
+  background:var(--card-bg);border:1px solid var(--border);border-radius:10px;
+  padding:1rem 1.5rem;font-size:.85rem;color:var(--text2);line-height:1.7;
+  display:flex;gap:1rem;align-items:flex-start
+}
+.ref-item::before{
+  counter-increment:ref;content:counter(ref);
+  font-family:'Orbitron',monospace;font-size:.75rem;color:var(--accent);
+  min-width:24px;margin-top:.1rem
+}
+.ref-item a{color:var(--accent);word-break:break-all}
+.ref-item a:hover{text-decoration:underline}
+
+/* ===== FOOTER ===== */
+footer{
+  background:var(--bg2);border-top:1px solid var(--border);
+  padding:2.5rem 2rem;text-align:center;position:relative;z-index:1
+}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-logo{display:flex;align-items:center;gap:.8rem}
+.footer-logo img{height:40px;filter:drop-shadow(0 0 6px rgba(245,166,35,.4))}
+.footer-text{font-size:.8rem;color:var(--text2);line-height:1.6}
+.footer-text strong{color:var(--accent);font-family:'Orbitron',monospace;font-size:.7rem}
+.footer-right{font-size:.75rem;color:var(--text2)}
+
+/* ===== DIVIDER ===== */
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:2rem 0}
+
+/* ===== SCROLL TO TOP ===== */
+#toTop{
+  position:fixed;bottom:2rem;right:2rem;width:44px;height:44px;
+  background:var(--accent);color:#000;border:none;border-radius:50%;
+  cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .3s,transform .2s;z-index:500
+}
+#toTop.visible{opacity:1}
+#toTop:hover{transform:translateY(-3px)}
+
+/* ===== MOBILE NAV ===== */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.3rem}
+.hamburger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+@media(max-width:900px){
+  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:var(--nav-bg);
+    flex-direction:column;padding:1rem 2rem;border-bottom:1px solid var(--border);gap:.8rem}
+  .nav-links.open{display:flex}
+  .hamburger{display:flex}
+  nav{flex-wrap:wrap}
+  #searchBar{width:120px}
+}
+
+/* ===== ANIMATIONS ===== */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.fade-in.visible{opacity:1;transform:none}
+
+/* ===== HIGHLIGHT ===== */
+.highlight{background:rgba(0,200,255,.2);border-radius:4px;padding:0 3px}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-logo">
+    <img src="/mnt/user-data/uploads/1778354694112_image.png" alt="Soran University" id="navLogo" onerror="this.style.display='none'">
+    <div class="nav-title">SORAN<br>UNIVERSITY</div>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="#hero">Home</a>
+    <a href="#about">About</a>
+    <a href="#research">Research</a>
+    <a href="#applications">Applications</a>
+    <a href="#stats-section">Stats</a>
+    <a href="#team">Team</a>
+    <a href="#contact">Contact</a>
+    <a href="#references">References</a>
+  </div>
+  <div class="nav-right">
+    <input type="text" id="searchBar" placeholder="🔍 Search..." autocomplete="off">
+    <button class="theme-btn" id="themeToggle" title="Toggle theme">🌙</button>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- SEARCH OVERLAY -->
+<div id="searchOverlay">
+  <button class="search-close" onclick="closeSearch()">✕ CLOSE</button>
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 id="searchHeading">Search Results</h2>
+    <div id="noResults">No results found. Try: AI, Cybersecurity, Cloud, IoT</div>
+    <div class="search-results-grid" id="searchResultsGrid"></div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-badge"><span></span> University Final Project 2024–2025</div>
+  <div class="hero-uni">
+    <img src="/mnt/user-data/uploads/1778354694112_image.png" alt="Soran University Logo" id="heroLogo" onerror="this.style.display='none'">
+    <div class="hero-uni-text">
+      <div class="u1">Soran University</div>
+      <div class="u2">زانكۆی سۆران</div>
+    </div>
+  </div>
+  <h1>
+    <div class="line1">Future</div>
+    <div class="line2"><span id="typed"></span></div>
+  </h1>
+  <p class="hero-desc">
+    Exploring the convergence of Artificial Intelligence, Cybersecurity, Cloud Computing, and the Internet of Things — shaping the next generation of technological innovation.
+  </p>
+  <div class="hero-ctas">
+    <button class="btn-primary" onclick="document.getElementById('research').scrollIntoView({behavior:'smooth'})">Explore Research</button>
+    <button class="btn-secondary" onclick="document.getElementById('team').scrollIntoView({behavior:'smooth'})">Meet The Team</button>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">4</div><div class="lab">Tech Domains</div></div>
+    <div class="hero-stat"><div class="num">12+</div><div class="lab">Research Areas</div></div>
+    <div class="hero-stat"><div class="num">3</div><div class="lab">Team Members</div></div>
+    <div class="hero-stat"><div class="num">2025</div><div class="lab">Project Year</div></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">01 · About Technology</div>
+  <h2>Core Technology <span style="color:var(--accent)">Pillars</span></h2>
+  <p class="section-desc">Our project investigates four transformative technology domains that are collectively reshaping industries, societies, and human experience in the 21st century.</p>
+  <div class="about-grid">
+    <div class="about-card" style="--accent-c:#00c8ff" data-search="ai artificial intelligence machine learning neural networks">
+      <div class="about-icon">🤖</div>
+      <h3>Artificial Intelligence</h3>
+      <p>AI systems simulate human cognitive processes including learning, reasoning, and problem-solving. From large language models to computer vision, AI is transforming every domain of human endeavor.</p>
+    </div>
+    <div class="about-card" style="--accent-c:#00ff88" data-search="cybersecurity security threats protection network">
+      <div class="about-icon">🔒</div>
+      <h3>Cybersecurity</h3>
+      <p>As digital infrastructure expands, protecting data, systems, and networks from malicious actors becomes paramount. Zero-trust architectures and AI-driven threat detection define modern defense strategies.</p>
+    </div>
+    <div class="about-card" style="--accent-c:#f5a623" data-search="cloud computing aws azure distributed scalable">
+      <div class="about-icon">☁️</div>
+      <h3>Cloud Computing</h3>
+      <p>Cloud platforms enable on-demand access to computing resources at massive scale. Serverless functions, container orchestration, and edge computing extend capabilities beyond traditional data centers.</p>
+    </div>
+    <div class="about-card" style="--accent-c:#c080ff" data-search="iot internet of things smart devices sensors embedded">
+      <div class="about-icon">📡</div>
+      <h3>Internet of Things</h3>
+      <p>Billions of interconnected devices generate unprecedented volumes of real-world data. IoT bridges the physical and digital worlds, enabling smart cities, precision agriculture, and industrial automation.</p>
+    </div>
+  </div>
+</section>
+
+<div style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+<!-- RESEARCH -->
+<section id="research">
+  <div class="section-label">02 · Research Areas</div>
+  <h2>Research <span style="color:var(--accent)">Areas</span></h2>
+  <p class="section-desc">Filter research topics by technology domain to explore our in-depth investigations.</p>
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="ai">AI</button>
+    <button class="filter-btn" data-filter="security">Security</button>
+    <button class="filter-btn" data-filter="cloud">Cloud</button>
+    <button class="filter-btn" data-filter="iot">IoT</button>
+  </div>
+  <div class="cards-grid" id="researchCards">
+    <div class="res-card" data-cat="ai" data-search="deep learning neural networks image recognition ai">
+      <div class="card-icon">🧠</div>
+      <span class="card-tag tag-ai">AI</span>
+      <h3>Deep Learning & Neural Networks</h3>
+      <p>Investigation of convolutional and transformer architectures enabling breakthroughs in image recognition, natural language understanding, and generative modeling.</p>
+    </div>
+    <div class="res-card" data-cat="ai" data-search="nlp natural language processing gpt bert ai language">
+      <div class="card-icon">💬</div>
+      <span class="card-tag tag-ai">AI</span>
+      <h3>Natural Language Processing</h3>
+      <p>Study of large language models, sentiment analysis, and conversational AI systems that enable machines to understand and generate human language with remarkable fluency.</p>
+    </div>
+    <div class="res-card" data-cat="ai" data-search="computer vision ai image object detection recognition">
+      <div class="card-icon">👁️</div>
+      <span class="card-tag tag-ai">AI</span>
+      <h3>Computer Vision</h3>
+      <p>Analysis of visual AI systems for object detection, facial recognition, medical imaging, and autonomous navigation using advanced feature extraction techniques.</p>
+    </div>
+    <div class="res-card" data-cat="security" data-search="cybersecurity threat detection intrusion prevention firewall">
+      <div class="card-icon">🛡️</div>
+      <span class="card-tag tag-security">Security</span>
+      <h3>Threat Detection Systems</h3>
+      <p>AI-powered intrusion detection and prevention systems that analyze network traffic patterns in real-time to identify and neutralize cyber threats before they cause harm.</p>
+    </div>
+    <div class="res-card" data-cat="security" data-search="cryptography encryption security data protection privacy">
+      <div class="card-icon">🔐</div>
+      <span class="card-tag tag-security">Security</span>
+      <h3>Cryptography & Encryption</h3>
+      <p>Research into quantum-resistant cryptographic algorithms, end-to-end encryption protocols, and zero-knowledge proofs for securing sensitive communications and data.</p>
+    </div>
+    <div class="res-card" data-cat="security" data-search="zero trust security network architecture access control">
+      <div class="card-icon">🚧</div>
+      <span class="card-tag tag-security">Security</span>
+      <h3>Zero-Trust Architecture</h3>
+      <p>Examination of the "never trust, always verify" security model that eliminates implicit trust and continuously validates every user, device, and network request.</p>
+    </div>
+    <div class="res-card" data-cat="cloud" data-search="cloud serverless microservices distributed computing aws azure">
+      <div class="card-icon">⚡</div>
+      <span class="card-tag tag-cloud">Cloud</span>
+      <h3>Serverless & Microservices</h3>
+      <p>Analysis of event-driven serverless architectures and microservice decomposition patterns that deliver scalable, resilient, and cost-efficient cloud-native applications.</p>
+    </div>
+    <div class="res-card" data-cat="cloud" data-search="edge computing cloud distributed latency fog computing">
+      <div class="card-icon">🌐</div>
+      <span class="card-tag tag-cloud">Cloud</span>
+      <h3>Edge Computing</h3>
+      <p>Study of how computation at the network edge reduces latency, conserves bandwidth, and enables real-time processing for applications like autonomous vehicles and AR/VR.</p>
+    </div>
+    <div class="res-card" data-cat="iot" data-search="smart city iot sensors urban infrastructure connected">
+      <div class="card-icon">🏙️</div>
+      <span class="card-tag tag-iot">IoT</span>
+      <h3>Smart City Infrastructure</h3>
+      <p>Investigation of IoT deployments in urban environments — from adaptive traffic management and smart energy grids to waste optimization and emergency response systems.</p>
+    </div>
+    <div class="res-card" data-cat="iot" data-search="industrial iot iiot manufacturing automation sensors">
+      <div class="card-icon">🏭</div>
+      <span class="card-tag tag-iot">IoT</span>
+      <h3>Industrial IoT (IIoT)</h3>
+      <p>Exploration of sensor-rich manufacturing environments where connected machinery enables predictive maintenance, quality assurance, and production optimization at scale.</p>
+    </div>
+    <div class="res-card" data-cat="ai" data-search="reinforcement learning ai robotics autonomous agents">
+      <div class="card-icon">🎮</div>
+      <span class="card-tag tag-ai">AI</span>
+      <h3>Reinforcement Learning</h3>
+      <p>Research into AI agents that learn optimal strategies through reward-based feedback loops, powering advances in robotics, game playing, and autonomous decision systems.</p>
+    </div>
+    <div class="res-card" data-cat="cloud" data-search="kubernetes containers docker orchestration devops cloud">
+      <div class="card-icon">📦</div>
+      <span class="card-tag tag-cloud">Cloud</span>
+      <h3>Container Orchestration</h3>
+      <p>Study of Kubernetes-based platforms for automating deployment, scaling, and management of containerized applications across hybrid and multi-cloud environments.</p>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- APPLICATIONS -->
+<section id="applications">
+  <div class="section-label">03 · Real-World Applications</div>
+  <h2>Real-Life <span style="color:var(--accent2)">Applications</span></h2>
+  <p class="section-desc">These technologies are not theoretical — they actively transform healthcare, transportation, finance, agriculture, and public safety worldwide.</p>
+  <div class="apps-grid">
+    <div class="app-item" data-search="healthcare ai medical diagnosis imaging">
+      <div class="icon">🏥</div>
+      <h4>Healthcare AI</h4>
+      <p>AI-powered diagnosis, drug discovery, and personalized treatment planning from medical imaging data.</p>
+    </div>
+    <div class="app-item" data-search="autonomous vehicles self-driving cars ai sensors iot">
+      <div class="icon">🚗</div>
+      <h4>Autonomous Vehicles</h4>
+      <p>Real-time sensor fusion, AI decision-making, and V2X communication for safe self-driving navigation.</p>
+    </div>
+    <div class="app-item" data-search="fintech finance banking fraud detection security cloud">
+      <div class="icon">💰</div>
+      <h4>FinTech Security</h4>
+      <p>AI-driven fraud detection, blockchain settlement, and cloud-native banking infrastructure.</p>
+    </div>
+    <div class="app-item" data-search="agriculture smart farming iot sensors precision">
+      <div class="icon">🌾</div>
+      <h4>Precision Agriculture</h4>
+      <p>IoT soil sensors, drone imaging, and ML models optimize crop yield and reduce resource waste.</p>
+    </div>
+    <div class="app-item" data-search="education ai learning personalized elearning">
+      <div class="icon">📚</div>
+      <h4>Intelligent Education</h4>
+      <p>Adaptive learning platforms using AI to personalize curriculum and identify struggling students.</p>
+    </div>
+    <div class="app-item" data-search="energy smart grid iot cloud renewable power">
+      <div class="icon">⚡</div>
+      <h4>Smart Energy Grids</h4>
+      <p>IoT-monitored power networks with AI demand forecasting and cloud-orchestrated balancing.</p>
+    </div>
+    <div class="app-item" data-search="cybersecurity defense military threat national security">
+      <div class="icon">🛡️</div>
+      <h4>National Cybersecurity</h4>
+      <p>Advanced persistent threat detection and critical infrastructure protection using ML models.</p>
+    </div>
+    <div class="app-item" data-search="retail ecommerce recommendation ai cloud shopping">
+      <div class="icon">🛒</div>
+      <h4>AI-Driven Retail</h4>
+      <p>Personalized recommendations, inventory forecasting, and cashier-free stores powered by computer vision.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div id="stats-section">
+  <div class="stats-inner">
+    <div class="section-label">04 · Technology Statistics</div>
+    <h2>Research <span style="color:var(--accent3)">Progress</span> & Impact</h2>
+    <p class="section-desc">Quantitative assessment of technology adoption, research depth, and projected global impact across our focus domains.</p>
+    <div class="progress-list" id="progressList">
+      <div class="prog-item">
+        <div class="prog-header"><span class="prog-label">Artificial Intelligence Research Depth</span><span class="prog-val" id="v1">0%</span></div>
+        <div class="prog-track"><div class="prog-bar ai-bar" data-val="92"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span class="prog-label">Cybersecurity Coverage</span><span class="prog-val" id="v2">0%</span></div>
+        <div class="prog-track"><div class="prog-bar sec-bar" data-val="87"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span class="prog-label">Cloud Computing Implementation</span><span class="prog-val" id="v3">0%</span></div>
+        <div class="prog-track"><div class="prog-bar cloud-bar" data-val="78"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span class="prog-label">IoT Systems & Protocols</span><span class="prog-val" id="v4">0%</span></div>
+        <div class="prog-track"><div class="prog-bar iot-bar" data-val="83"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-header"><span class="prog-label">Machine Learning Applications</span><span class="prog-val" id="v5">0%</span></div>
+        <div class="prog-track"><div class="prog-bar ml-bar" data-val="95"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-label">05 · Technology Gallery</div>
+  <h2>Visual <span style="color:var(--accent)">Gallery</span></h2>
+  <p class="section-desc">A curated visual overview of the technology landscapes shaping our research project.</p>
+  <div class="gallery-grid">
+    <div class="gallery-item"><div class="gal-icon">🤖</div><div class="gal-label">AI & Robotics</div><div class="gal-overlay">🔍</div></div>
+    <div class="gallery-item"><div class="gal-icon">🧠</div><div class="gal-label">Neural Networks</div><div class="gal-overlay">🔍</div></div>
+    <div class="gallery-item"><div class="gal-icon">🔒</div><div class="gal-label">Cybersecurity</div><div class="gal-overlay">🔍</div></div>
+    <div class="gallery-item"><div class="gal-icon">☁️</div><div class="gal-label">Cloud Architecture</div><div class="gal-overlay">🔍</div></div>
+    <div class="gallery-item"><div class="gal-icon">📡</div><div class="gal-label">IoT Network</div><div class="gal-overlay">🔍</div></div>
+    <div class="gallery-item"><div class="gal-icon">🌐</div><div class="gal-label">Edge Computing</div><div class="gal-overlay">🔍</div></div>
+    <div class="gallery-item"><div class="gal-icon">💻</div><div class="gal-label">Data Centers</div><div class="gal-overlay">🔍</div></div>
+    <div class="gallery-item"><div class="gal-icon">🛡️</div><div class="gal-label">Threat Defense</div><div class="gal-overlay">🔍</div></div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team" style="background:linear-gradient(180deg,transparent,var(--bg2) 50%,transparent);padding:5rem 2rem">
+  <div style="max-width:1200px;margin:0 auto">
+  <div class="section-label">06 · Project Team</div>
+  <h2>Meet The <span style="color:var(--accent2)">Team</span></h2>
+  <p class="section-desc">The dedicated researchers and developers behind the Future Technology Project at Soran University.</p>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar">M</div>
+      <h3>Mo'men</h3>
+      <div class="team-role">AI & Machine Learning Lead</div>
+      <p class="team-desc">Specializes in deep learning architectures, natural language processing, and the ethical deployment of AI systems in critical domains.</p>
+      <div class="team-socials">
+        <a href="#" title="GitHub">⌨</a>
+        <a href="#" title="LinkedIn">in</a>
+        <a href="#" title="Email">✉</a>
+      </div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#00443a,var(--accent3))">Y</div>
+      <h3>Yousef</h3>
+      <div class="team-role">Cybersecurity & Cloud Architect</div>
+      <p class="team-desc">Expert in zero-trust security frameworks, cloud-native infrastructure design, and threat intelligence analysis for enterprise environments.</p>
+      <div class="team-socials">
+        <a href="#" title="GitHub">⌨</a>
+        <a href="#" title="LinkedIn">in</a>
+        <a href="#" title="Email">✉</a>
+      </div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#44003a,#c080ff)">Z</div>
+      <h3>Zanyar</h3>
+      <div class="team-role">IoT Systems & Full-Stack Developer</div>
+      <p class="team-desc">Focuses on embedded IoT systems, sensor network protocols, and building the frontend interfaces that make complex data accessible and intuitive.</p>
+      <div class="team-socials">
+        <a href="#" title="GitHub">⌨</a>
+        <a href="#" title="LinkedIn">in</a>
+        <a href="#" title="Email">✉</a>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">07 · Contact</div>
+  <h2>Get In <span style="color:var(--accent)">Touch</span></h2>
+  <p class="section-desc">Have questions about our research or want to collaborate? Reach out to the project team.</p>
+  <div class="contact-wrap">
+    <div class="contact-info">
+      <h3>Project Information</h3>
+      <p>This project is submitted as a final year technology project at the Department of Computer Science, Soran University. We welcome academic collaboration and feedback from fellow researchers.</p>
+      <div class="contact-details">
+        <div class="c-detail"><span>🏛️</span><span>Soran University, Soran, Kurdistan Region, Iraq</span></div>
+        <div class="c-detail"><span>📧</span><span>futuretech@soran.edu.iq</span></div>
+        <div class="c-detail"><span>📞</span><span>+964 (0) 750 000 0000</span></div>
+        <div class="c-detail"><span>🌐</span><span>www.soran.edu.iq</span></div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" id="fname" placeholder="Your first name">
+          <div class="form-error" id="fnameErr">First name is required.</div>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="lname" placeholder="Your last name">
+          <div class="form-error" id="lnameErr">Last name is required.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="email" placeholder="your@email.com">
+        <div class="form-error" id="emailErr">Please enter a valid email address.</div>
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <select id="subject">
+          <option value="">-- Select a subject --</option>
+          <option>Research Collaboration</option>
+          <option>Academic Inquiry</option>
+          <option>Project Feedback</option>
+          <option>General Question</option>
+        </select>
+        <div class="form-error" id="subjectErr">Please select a subject.</div>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea id="message" rows="4" placeholder="Write your message here..."></textarea>
+        <div class="form-error" id="msgErr">Message is required (min. 20 characters).</div>
+      </div>
+      <button class="btn-primary" onclick="submitForm()" style="width:100%">Send Message ➤</button>
+      <div class="form-success" id="formSuccess">✅ Message sent successfully! We'll get back to you soon.</div>
+    </div>
+  </div>
+</section>
+
+<!-- REFERENCES -->
+<section id="references" style="background:var(--bg2);padding:5rem 2rem;margin:0">
+  <div style="max-width:1200px;margin:0 auto">
+  <div class="section-label">08 · References</div>
+  <h2>Academic <span style="color:var(--accent2)">References</span></h2>
+  <p class="section-desc">Peer-reviewed papers, technical documentation, and authoritative sources underpinning our research.</p>
+  <div class="refs-list">
+    <div class="ref-item">LeCun, Y., Bengio, Y., & Hinton, G. (2015). Deep learning. <em>Nature</em>, 521(7553), 436–444. <a href="https://doi.org/10.1038/nature14539" target="_blank">doi:10.1038/nature14539</a></div>
+    <div class="ref-item">Goodfellow, I., Bengio, Y., & Courville, A. (2016). <em>Deep Learning</em>. MIT Press. Available at <a href="https://www.deeplearningbook.org" target="_blank">deeplearningbook.org</a></div>
+    <div class="ref-item">Vaswani, A., et al. (2017). Attention is all you need. <em>Advances in Neural Information Processing Systems</em>, 30. <a href="https://arxiv.org/abs/1706.03762" target="_blank">arXiv:1706.03762</a></div>
+    <div class="ref-item">NIST. (2018). Framework for Improving Critical Infrastructure Cybersecurity, Version 1.1. National Institute of Standards and Technology. <a href="https://www.nist.gov/cyberframework" target="_blank">nist.gov/cyberframework</a></div>
+    <div class="ref-item">Mell, P., & Grance, T. (2011). The NIST Definition of Cloud Computing. NIST Special Publication 800-145. <a href="https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-145.pdf" target="_blank">NIST SP 800-145</a></div>
+    <div class="ref-item">Ashton, K. (2009). That 'Internet of Things' Thing. <em>RFID Journal</em>. The term "Internet of Things" was coined by Ashton in 1999 and formalized in this article.</div>
+    <div class="ref-item">Kubernetes Documentation. (2024). Production-Grade Container Orchestration. The Linux Foundation. <a href="https://kubernetes.io/docs" target="_blank">kubernetes.io/docs</a></div>
+    <div class="ref-item">Goldreich, O. (2001). <em>Foundations of Cryptography: Volume 1, Basic Tools</em>. Cambridge University Press. ISBN: 978-0521035361.</div>
+    <div class="ref-item">Brown, T., et al. (2020). Language models are few-shot learners. <em>Advances in Neural Information Processing Systems</em>, 33. <a href="https://arxiv.org/abs/2005.14165" target="_blank">arXiv:2005.14165</a></div>
+    <div class="ref-item">IEEE. (2020). IEEE Standard for an Architectural Framework for the Internet of Things (IoT). IEEE Std 2413-2019. <a href="https://standards.ieee.org" target="_blank">standards.ieee.org</a></div>
+  </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="/mnt/user-data/uploads/1778354694112_image.png" alt="Soran University" onerror="this.style.display='none'">
+      <div>
+        <div style="font-family:'Orbitron',monospace;font-size:.75rem;color:var(--accent)">SORAN UNIVERSITY</div>
+        <div style="font-size:.75rem;color:var(--text2)">زانكۆی سۆران</div>
+      </div>
+    </div>
+    <div class="footer-text">
+      <strong>FUTURE TECHNOLOGY PROJECT</strong><br>
+      Department of Computer Science · 2024–2025<br>
+      Team: Mo'men · Yousef · Zanyar
+    </div>
+    <div class="footer-right">
+      © 2025 Soran University<br>All rights reserved
+    </div>
+  </div>
+</footer>
+
+<!-- SCROLL TO TOP -->
+<button id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+/* ===================================
+   SEARCH DATA
+=================================== */
+const searchData = [
+  {tag:'AI',title:'Artificial Intelligence',text:'AI systems simulate human cognitive processes including learning, reasoning, and problem-solving. From LLMs to computer vision, AI transforms every domain.',section:'about'},
+  {tag:'AI',title:'Deep Learning & Neural Networks',text:'Convolutional and transformer architectures enabling breakthroughs in image recognition and natural language understanding.',section:'research'},
+  {tag:'AI',title:'Natural Language Processing',text:'Large language models, sentiment analysis, and conversational AI enabling machines to understand and generate human language.',section:'research'},
+  {tag:'AI',title:'Computer Vision',text:'Visual AI systems for object detection, facial recognition, medical imaging, and autonomous navigation.',section:'research'},
+  {tag:'AI',title:'Reinforcement Learning',text:'AI agents that learn optimal strategies through reward-based feedback loops, powering advances in robotics and game playing.',section:'research'},
+  {tag:'Security',title:'Cybersecurity',text:'Protecting data, systems, and networks from malicious actors. Zero-trust architectures and AI-driven threat detection define modern defense.',section:'about'},
+  {tag:'Security',title:'Threat Detection Systems',text:'AI-powered intrusion detection analyzing network traffic patterns in real-time to identify and neutralize cyber threats.',section:'research'},
+  {tag:'Security',title:'Cryptography & Encryption',text:'Quantum-resistant algorithms, end-to-end encryption protocols, and zero-knowledge proofs for securing communications.',section:'research'},
+  {tag:'Security',title:'Zero-Trust Architecture',text:'Never trust, always verify security model that continuously validates every user, device, and network request.',section:'research'},
+  {tag:'Cloud',title:'Cloud Computing',text:'On-demand access to computing resources at massive scale. Serverless, containers, and edge computing extend capabilities.',section:'about'},
+  {tag:'Cloud',title:'Serverless & Microservices',text:'Event-driven serverless architectures and microservice patterns for scalable, resilient cloud-native applications.',section:'research'},
+  {tag:'Cloud',title:'Edge Computing',text:'Computation at the network edge reduces latency and enables real-time processing for autonomous vehicles and AR/VR.',section:'research'},
+  {tag:'Cloud',title:'Container Orchestration',text:'Kubernetes-based platforms for automating deployment, scaling, and management of containerized applications.',section:'research'},
+  {tag:'IoT',title:'Internet of Things',text:'Billions of interconnected devices bridging physical and digital worlds, enabling smart cities and industrial automation.',section:'about'},
+  {tag:'IoT',title:'Smart City Infrastructure',text:'IoT deployments for adaptive traffic management, smart energy grids, waste optimization, and emergency response.',section:'research'},
+  {tag:'IoT',title:'Industrial IoT (IIoT)',text:'Sensor-rich manufacturing with connected machinery for predictive maintenance and production optimization.',section:'research'},
+  {tag:'AI',title:'Healthcare AI Application',text:'AI-powered diagnosis, drug discovery, and personalized treatment planning from medical imaging data.',section:'applications'},
+  {tag:'Security',title:'National Cybersecurity',text:'Advanced persistent threat detection and critical infrastructure protection using ML models.',section:'applications'},
+  {tag:'Cloud',title:'Smart Energy Grids',text:'IoT-monitored power networks with AI demand forecasting and cloud-orchestrated balancing.',section:'applications'},
+  {tag:'IoT',title:'Autonomous Vehicles',text:'Real-time sensor fusion, AI decision-making, and V2X communication for safe self-driving navigation.',section:'applications'},
+];
+
+const tagColors = {AI:'#00c8ff',Security:'#00ff88',Cloud:'#f5a623',IoT:'#c080ff'};
+
+/* ===================================
+   TYPING ANIMATION
+=================================== */
+const words = ['Technology Project','Innovation Lab','Research Initiative','Digital Future','Intelligence Systems'];
+let wIdx=0,cIdx=0,deleting=false;
+const typedEl = document.getElementById('typed');
+function type(){
+  const word = words[wIdx];
+  if(!deleting){
+    typedEl.textContent = word.slice(0,++cIdx);
+    if(cIdx===word.length){deleting=true;setTimeout(type,1800);return;}
+  } else {
+    typedEl.textContent = word.slice(0,--cIdx);
+    if(cIdx===0){deleting=false;wIdx=(wIdx+1)%words.length;}
+  }
+  setTimeout(type,deleting?60:100);
+}
+setTimeout(type,500);
+
+/* ===================================
+   DARK / LIGHT MODE
+=================================== */
+const themeBtn = document.getElementById('themeToggle');
+themeBtn.addEventListener('click',()=>{
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme')==='dark';
+  html.setAttribute('data-theme', isDark?'light':'dark');
+  themeBtn.textContent = isDark?'☀️':'🌙';
+});
+
+/* ===================================
+   HAMBURGER MENU
+=================================== */
+document.getElementById('hamburger').addEventListener('click',()=>{
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+/* ===================================
+   SMOOTH NAV LINKS
+=================================== */
+document.querySelectorAll('.nav-links a').forEach(a=>{
+  a.addEventListener('click',()=>document.getElementById('navLinks').classList.remove('open'));
+});
+
+/* ===================================
+   SEARCH SYSTEM
+=================================== */
+const searchInput = document.getElementById('searchBar');
+const overlay = document.getElementById('searchOverlay');
+const resultsGrid = document.getElementById('searchResultsGrid');
+const noResults = document.getElementById('noResults');
+const searchHeading = document.getElementById('searchHeading');
+
+searchInput.addEventListener('input', ()=>{
+  const q = searchInput.value.trim().toLowerCase();
+  if(q.length < 2){closeSearch();return;}
+  performSearch(q);
+});
+searchInput.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closeSearch();
+});
+
+function performSearch(q){
+  const matches = searchData.filter(d=>
+    d.title.toLowerCase().includes(q)||
+    d.text.toLowerCase().includes(q)||
+    d.tag.toLowerCase().includes(q)||
+    d.section.toLowerCase().includes(q)
+  );
+  overlay.classList.add('active');
+  searchHeading.textContent = `Search Results for "${searchInput.value}" (${matches.length} found)`;
+  resultsGrid.innerHTML = '';
+  noResults.style.display = matches.length===0?'block':'none';
+  matches.forEach(m=>{
+    const c = document.createElement('div');
+    c.className='search-result-card';
+    c.innerHTML=`<span class="tag" style="background:${tagColors[m.tag]||'#00c8ff'};color:#000">${m.tag}</span>
+      <h3>${m.title}</h3><p>${m.text}</p>
+      <p style="margin-top:.8rem;font-size:.75rem;color:var(--accent);cursor:pointer" onclick="goToSection('${m.section}')">→ Go to section</p>`;
+    resultsGrid.appendChild(c);
+  });
+}
+
+function closeSearch(){
+  overlay.classList.remove('active');
+  searchInput.value='';
+}
+
+function goToSection(id){
+  closeSearch();
+  const el=document.getElementById(id);
+  if(el)el.scrollIntoView({behavior:'smooth'});
+}
+
+/* ===================================
+   CARD FILTER SYSTEM
+=================================== */
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.res-card').forEach(card=>{
+      if(f==='all'||card.dataset.cat===f){
+        card.classList.remove('hidden');
+        card.style.animation='none';
+        card.offsetHeight;
+        card.style.animation='fadeInUp .4s ease forwards';
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  });
+});
+
+/* ===================================
+   PROGRESS BARS (Intersection Observer)
+=================================== */
+let barsAnimated = false;
+const progBars = document.querySelectorAll('.prog-bar');
+const vals = [document.getElementById('v1'),document.getElementById('v2'),document.getElementById('v3'),document.getElementById('v4'),document.getElementById('v5')];
+
+function animateBars(){
+  if(barsAnimated)return;
+  barsAnimated=true;
+  progBars.forEach((bar,i)=>{
+    const target = parseInt(bar.dataset.val);
+    bar.style.width = target+'%';
+    let current=0;
+    const step = target/60;
+    const interval = setInterval(()=>{
+      current = Math.min(current+step,target);
+      vals[i].textContent = Math.round(current)+'%';
+      if(current>=target)clearInterval(interval);
+    },20);
+  });
+}
+
+const statsObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting)animateBars();});
+},{threshold:0.3});
+statsObserver.observe(document.getElementById('stats-section'));
+
+/* ===================================
+   FADE IN ANIMATIONS
+=================================== */
+const fadeEls = document.querySelectorAll('.about-card,.res-card,.app-item,.team-card,.ref-item,.gallery-item');
+const fadeObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      fadeObserver.unobserve(e.target);
+    }
+  });
+},{threshold:0.1});
+fadeEls.forEach((el,i)=>{
+  el.classList.add('fade-in');
+  el.style.transitionDelay = (i%4)*0.08+'s';
+  fadeObserver.observe(el);
+});
+
+/* ===================================
+   SCROLL TO TOP
+=================================== */
+const toTop = document.getElementById('toTop');
+window.addEventListener('scroll',()=>{
+  toTop.classList.toggle('visible', window.scrollY>400);
+});
+
+/* ===================================
+   CONTACT FORM VALIDATION
+=================================== */
+function submitForm(){
+  let valid = true;
+
+  const fields = [
+    {id:'fname',err:'fnameErr',check:v=>v.length>0},
+    {id:'lname',err:'lnameErr',check:v=>v.length>0},
+    {id:'email',err:'emailErr',check:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)},
+    {id:'subject',err:'subjectErr',check:v=>v.length>0},
+    {id:'message',err:'msgErr',check:v=>v.length>=20},
+  ];
+
+  fields.forEach(f=>{
+    const el = document.getElementById(f.id);
+    const errEl = document.getElementById(f.err);
+    const val = el.value.trim();
+    if(!f.check(val)){
+      el.classList.add('error');
+      errEl.classList.add('show');
+      valid=false;
+    } else {
+      el.classList.remove('error');
+      errEl.classList.remove('show');
+    }
+  });
+
+  if(valid){
+    document.getElementById('formSuccess').classList.add('show');
+    ['fname','lname','email','subject','message'].forEach(id=>{
+      document.getElementById(id).value='';
+    });
+    setTimeout(()=>document.getElementById('formSuccess').classList.remove('show'),5000);
+  }
+}
+
+// Clear errors on input
+['fname','lname','email','subject','message'].forEach(id=>{
+  const el = document.getElementById(id);
+  el.addEventListener('input',()=>{
+    el.classList.remove('error');
+    document.getElementById(id+'Err').classList.remove('show');
+  });
+});
+
+/* ===================================
+   COUNTER ANIMATION (hero stats)
+=================================== */
+function animateCounter(el, target, suffix=''){
+  let current=0;
+  const step=target/40;
+  const interval=setInterval(()=>{
+    current=Math.min(current+step,target);
+    el.textContent=Math.round(current)+(suffix);
+    if(current>=target)clearInterval(interval);
+  },30);
+}
+const heroNums = document.querySelectorAll('.hero-stat .num');
+const heroObserver = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const nums=[4,12,3,2025];
+      const sfx=['','+',' ',''];
+      heroNums.forEach((el,i)=>animateCounter(el,nums[i],sfx[i]||''));
+      heroObserver.disconnect();
+    }
+  });
+},{threshold:0.5});
+if(heroNums[0])heroObserver.observe(heroNums[0]);
+
+/* ===================================
+   LOGO FALLBACK SVG
+=================================== */
+// Embed SVG logo as fallback if image fails
+const logoEls = document.querySelectorAll('img[alt="Soran University"], img[alt="Soran University Logo"]');
+const svgLogo = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120"><path d="M10 10 h80 v70 q0 30-40 40 q-40-10-40-40z" fill="white" stroke="#1a3a6e" stroke-width="4"/><circle cx="50" cy="38" r="18" fill="%23f5a623"/><text x="50" y="80" text-anchor="middle" font-family="Arial" font-size="9" fill="%231a3a6e" font-weight="bold">SORAN</text><text x="50" y="92" text-anchor="middle" font-family="Arial" font-size="7" fill="%231a3a6e">UNIVERSITY</text></svg>`)}`;
+logoEls.forEach(img=>{
+  img.addEventListener('error',()=>{img.src=svgLogo;});
+});
+
+</script>
+</body>
+</html>
